@@ -68,39 +68,36 @@
       position: relative;
     }
 
-    .assistant-input-wrapper {
+    .assistant-panel {
       position: fixed;
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
       max-width: 390px;
       width: 100%;
+      background: white;
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
+      padding: 12px 16px;
       z-index: 1000;
-      padding: 0 16px 16px;
       display: none;
+    }
+
+    .assistant-panel.visible {
+      display: block;
     }
 
     .quick-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 8px;
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: all 0.3s;
-    }
-
-    .quick-actions.visible {
-      max-height: 200px;
-      opacity: 1;
+      gap: 8px;
+      margin-bottom: 12px;
     }
 
     .action-btn {
       padding: 8px 12px;
-      border: 1px solid rgba(255,255,255,0.3);
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
+      border: 1px solid #e0e0e0;
+      background: white;
       border-radius: 20px;
       font-size: 13px;
       font-weight: 500;
@@ -109,14 +106,15 @@
       display: flex;
       align-items: center;
       gap: 5px;
-      color: white;
+      color: #333;
       white-space: nowrap;
       flex-shrink: 0;
     }
 
     .action-btn:active {
-      background: rgba(255,255,255,0.25);
+      background: #f5f5f5;
       transform: scale(0.96);
+      border-color: #667eea;
     }
 
     .action-btn .icon {
@@ -126,77 +124,156 @@
 
     .custom-input {
       position: relative;
+      margin-bottom: 8px;
     }
 
     .custom-input input {
       width: 100%;
-      padding: 14px 16px;
-      border: none;
+      padding: 12px 16px;
+      border: 1px solid #e0e0e0;
       border-radius: 12px;
       font-size: 16px;
       outline: none;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      background: #f8f8f8;
+    }
+
+    .custom-input input:focus {
+      border-color: #667eea;
+      background: white;
     }
 
     .custom-input input::placeholder {
       color: #999;
     }
 
-    .overlay {
+    .keyboard {
+      background: #d3d7db;
+      padding: 8px;
+      border-radius: 8px 8px 0 0;
+      display: none;
+    }
+
+    .keyboard.visible {
+      display: block;
+    }
+
+    .keyboard-row {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 6px;
+      justify-content: center;
+    }
+
+    .keyboard-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .key {
+      background: white;
+      border: none;
+      border-radius: 5px;
+      padding: 12px 8px;
+      font-size: 16px;
+      font-weight: 400;
+      cursor: pointer;
+      min-width: 28px;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+      flex: 1;
+      max-width: 34px;
+    }
+
+    .key.wide {
+      flex: 1.5;
+      max-width: 50px;
+    }
+
+    .key.space {
+      flex: 3;
+      max-width: 150px;
+    }
+
+    .key:active {
+      background: #e0e0e0;
+      transform: scale(0.95);
+    }
+
+    .response-card {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 350px;
+      width: 90%;
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      z-index: 1001;
+      display: none;
+    }
+
+    .response-card.visible {
+      display: block;
+    }
+
+    .response-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .response-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+    }
+
+    .response-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .response-content {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+      margin-bottom: 16px;
+    }
+
+    .response-close {
+      width: 100%;
+      padding: 12px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .response-close:active {
+      background: #5568d3;
+    }
+
+    .overlay-dim {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0,0,0,0.85);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-      z-index: 999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      display: none;
     }
 
-    .overlay.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .assistant-branding {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 120px;
-    }
-
-    .assistant-logo {
-      width: 80px;
-      height: 80px;
-      background: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .assistant-logo::before {
-      content: '';
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 50%;
-    }
-
-    .assistant-name {
-      color: white;
-      font-size: 20px;
-      font-weight: 500;
+    .overlay-dim.visible {
+      display: block;
     }
 
   </style>
@@ -218,36 +295,31 @@
     <p data-id="p5">The key to success lies in understanding user behavior. On mobile, quick actions and contextual suggestions work better than complex interfaces. Users want instant results without interrupting their reading flow.</p>
     </div>
 
-    <div class="overlay" id="overlay">
-      <div class="assistant-branding">
-        <div class="assistant-logo"></div>
-        <div class="assistant-name">Assistant</div>
-      </div>
-    </div>
+    <div class="overlay-dim" id="overlayDim"></div>
 
-    <div class="assistant-input-wrapper" id="inputWrapper">
-      <div class="quick-actions" id="quickActions">
-        <button class="action-btn" onclick="handleAction('fact-check')">
+    <div class="assistant-panel" id="assistantPanel">
+      <div class="quick-actions">
+        <button class="action-btn" onclick="handleAction('Fact-check')">
           <span class="icon">✓</span>
           <span>Fact-check</span>
         </button>
-        <button class="action-btn" onclick="handleAction('define')">
+        <button class="action-btn" onclick="handleAction('Define')">
           <span class="icon">📖</span>
           <span>Define</span>
         </button>
-        <button class="action-btn" onclick="handleAction('summarize')">
+        <button class="action-btn" onclick="handleAction('Summarize')">
           <span class="icon">📝</span>
           <span>Summarize</span>
         </button>
-        <button class="action-btn" onclick="handleAction('translate')">
+        <button class="action-btn" onclick="handleAction('Translate')">
           <span class="icon">🌐</span>
           <span>Translate</span>
         </button>
-        <button class="action-btn" onclick="handleAction('explain')">
+        <button class="action-btn" onclick="handleAction('Explain')">
           <span class="icon">💡</span>
           <span>Explain</span>
         </button>
-        <button class="action-btn" onclick="handleAction('related')">
+        <button class="action-btn" onclick="handleAction('Related')">
           <span class="icon">🔗</span>
           <span>Related</span>
         </button>
@@ -259,9 +331,58 @@
           placeholder="Ask anything..."
           id="customInput"
           onkeypress="handleCustomInput(event)"
-          onfocus="showQuickActions()"
+          onfocus="showKeyboard()"
         />
       </div>
+
+      <div class="keyboard" id="keyboard">
+        <div class="keyboard-row">
+          <button class="key">Q</button>
+          <button class="key">W</button>
+          <button class="key">E</button>
+          <button class="key">R</button>
+          <button class="key">T</button>
+          <button class="key">Y</button>
+          <button class="key">U</button>
+          <button class="key">I</button>
+          <button class="key">O</button>
+          <button class="key">P</button>
+        </div>
+        <div class="keyboard-row">
+          <button class="key">A</button>
+          <button class="key">S</button>
+          <button class="key">D</button>
+          <button class="key">F</button>
+          <button class="key">G</button>
+          <button class="key">H</button>
+          <button class="key">J</button>
+          <button class="key">K</button>
+          <button class="key">L</button>
+        </div>
+        <div class="keyboard-row">
+          <button class="key">Z</button>
+          <button class="key">X</button>
+          <button class="key">C</button>
+          <button class="key">V</button>
+          <button class="key">B</button>
+          <button class="key">N</button>
+          <button class="key">M</button>
+        </div>
+        <div class="keyboard-row">
+          <button class="key space">space</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="response-card" id="responseCard">
+      <div class="response-header">
+        <div class="response-icon"></div>
+        <div class="response-title" id="responseTitle">Response</div>
+      </div>
+      <div class="response-content" id="responseContent">
+        This is where the AI response would appear. In a real implementation, this would show the result from your query.
+      </div>
+      <button class="response-close" onclick="hideResponse()">Close</button>
     </div>
   </div>
 
@@ -287,17 +408,14 @@
     });
 
     function showPopup() {
-      document.getElementById('overlay').classList.add('visible');
-      document.getElementById('inputWrapper').style.display = 'block';
-      document.body.style.overflow = 'hidden';
+      document.getElementById('assistantPanel').classList.add('visible');
     }
 
     function hidePopup() {
-      document.getElementById('overlay').classList.remove('visible');
-      document.getElementById('inputWrapper').style.display = 'none';
-      document.getElementById('quickActions').classList.remove('visible');
+      document.getElementById('assistantPanel').classList.remove('visible');
+      document.getElementById('keyboard').classList.remove('visible');
       document.getElementById('customInput').value = '';
-      document.body.style.overflow = '';
+      document.getElementById('customInput').blur();
 
       if (selectedParagraph) {
         selectedParagraph.classList.remove('selected');
@@ -305,28 +423,43 @@
       }
     }
 
-    function showQuickActions() {
-      document.getElementById('quickActions').classList.add('visible');
+    function showKeyboard() {
+      document.getElementById('keyboard').classList.add('visible');
     }
 
-    document.getElementById('overlay').addEventListener('click', function(e) {
-      if (e.target === document.getElementById('overlay')) {
-        hidePopup();
-      }
-    });
+    function showResponse(title, content) {
+      document.getElementById('responseTitle').textContent = title;
+      document.getElementById('responseContent').textContent = content;
+      document.getElementById('responseCard').classList.add('visible');
+      document.getElementById('overlayDim').classList.add('visible');
+      hidePopup();
+    }
+
+    function hideResponse() {
+      document.getElementById('responseCard').classList.remove('visible');
+      document.getElementById('overlayDim').classList.remove('visible');
+    }
+
+    document.getElementById('overlayDim').addEventListener('click', hideResponse);
 
     function handleAction(action) {
       console.log('Action:', action, 'on text:', selectedText.substring(0, 50) + '...');
-      alert(`Action: ${action}\n\nIn real app, this would:\n1. Send text to backend\n2. Open sidecar with result\n3. Hide this popup`);
-      hidePopup();
+      showResponse(
+        action,
+        `${action} result for: "${selectedText.substring(0, 100)}..."\n\nIn a real app, this would show the AI-generated response based on your selected text.`
+      );
     }
 
     function handleCustomInput(event) {
       if (event.key === 'Enter') {
         const query = event.target.value;
+        if (!query.trim()) return;
+
         console.log('Custom query:', query, 'on text:', selectedText.substring(0, 50) + '...');
-        alert(`Custom query: "${query}"\n\nIn real app, this would:\n1. Send query + selected text to backend\n2. Open sidecar with result\n3. Hide this popup`);
-        hidePopup();
+        showResponse(
+          'Custom Query',
+          `Query: "${query}"\n\nSelected text: "${selectedText.substring(0, 100)}..."\n\nIn a real app, this would show the AI response to your custom question about the selected text.`
+        );
       }
     }
   </script>
