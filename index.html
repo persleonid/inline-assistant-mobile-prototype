@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inline Assistant Mobile - Prototypes</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .header p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    .prototypes {
+      display: grid;
+      gap: 20px;
+    }
+
+    .prototype-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .prototype-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    }
+
+    .prototype-card h2 {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #1a1a1a;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .prototype-card .icon {
+      font-size: 32px;
+    }
+
+    .prototype-card p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .prototype-card .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .feature-tag {
+      background: #f0f0f0;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .arrow {
+      float: right;
+      font-size: 24px;
+      color: #667eea;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: white;
+      opacity: 0.8;
+    }
+
+    .footer a {
+      color: white;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .header p {
+        font-size: 16px;
+      }
+
+      .prototype-card h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📱 Inline Assistant Mobile</h1>
+      <p>Interactive prototypes for mobile AI assistance</p>
+    </div>
+
+    <div class="prototypes">
+      <a href="reading-prototype.html" class="prototype-card">
+        <h2>
+          <span class="icon">📖</span>
+          Reading Mode
+          <span class="arrow">→</span>
+        </h2>
+        <p>
+          Tap any paragraph to instantly get AI assistance. Fact-check, define,
+          summarize, translate, or ask custom questions about the selected text.
+        </p>
+        <div class="features">
+          <span class="feature-tag">Quick actions</span>
+          <span class="feature-tag">Paragraph selection</span>
+          <span class="feature-tag">Context-aware</span>
+        </div>
+      </a>
+
+      <a href="writing-prototype.html" class="prototype-card">
+        <h2>
+          <span class="icon">✍️</span>
+          Writing Mode
+          <span class="arrow">→</span>
+        </h2>
+        <p>
+          Focus on any text input to activate writing assistance. Improve grammar,
+          rephrase, make professional, or get AI help with custom prompts.
+        </p>
+        <div class="features">
+          <span class="feature-tag">Grammar improvements</span>
+          <span class="feature-tag">Style changes</span>
+          <span class="feature-tag">Auto-complete</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="footer">
+      <p>Built for Perplexity Comet Mobile</p>
+      <p><a href="https://github.com/yourusername/inline-assistant-mobile-prototype">View on GitHub</a></p>
+    </div>
+  </div>
+</body>
+</html>

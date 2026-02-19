@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inline Assistant - Writing Mode Prototype</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #f5f5f5;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-header {
+      background: white;
+      padding: 16px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .app-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .content-area {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .compose-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 16px;
+    }
+
+    .compose-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .text-input {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: inherit;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .text-input:focus {
+      border-color: #667eea;
+    }
+
+    .assistance-panel {
+      background: white;
+      border-radius: 12px 12px 0 0;
+      padding: 16px;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.1);
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      max-height: 50vh;
+      overflow-y: auto;
+    }
+
+    .assistance-panel.visible {
+      transform: translateY(0);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .comet-icon {
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+    }
+
+    .collapse-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: #f0f0f0;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #666;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .action-btn {
+      padding: 12px 16px;
+      border: 1px solid #e0e0e0;
+      background: white;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #333;
+      text-align: left;
+    }
+
+    .action-btn:active {
+      background: #f5f5f5;
+      transform: scale(0.98);
+    }
+
+    .action-btn .icon {
+      font-size: 18px;
+    }
+
+    .action-btn .description {
+      font-size: 12px;
+      color: #999;
+      font-weight: normal;
+    }
+
+    .custom-prompt {
+      position: relative;
+      margin-top: 12px;
+    }
+
+    .prompt-input {
+      width: 100%;
+      padding: 12px 16px;
+      padding-right: 48px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+
+    .prompt-input:focus {
+      border-color: #667eea;
+    }
+
+    .send-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: #667eea;
+      color: white;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .send-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .keyboard-trigger {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+      background: white;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 14px;
+      transition: transform 0.3s;
+      z-index: 999;
+    }
+
+    .keyboard-trigger.hidden {
+      transform: translateY(100%);
+    }
+
+    .example-context {
+      background: #f9f9f9;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .context-label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-header">
+    <button class="back-btn">‹</button>
+    <div class="app-title">Compose Email</div>
+  </div>
+
+  <div class="content-area">
+    <div class="compose-card">
+      <div class="compose-label">To</div>
+      <input type="email" class="text-input" style="min-height: auto; height: 44px;" placeholder="recipient@example.com" />
+    </div>
+
+    <div class="compose-card">
+      <div class="compose-label">Subject</div>
+      <input type="text" class="text-input" style="min-height: auto; height: 44px;" placeholder="Enter subject" />
+    </div>
+
+    <div class="compose-card">
+      <div class="compose-label">Message</div>
+      <textarea
+        class="text-input"
+        id="mainInput"
+        placeholder="Type your message..."
+        onfocus="showAssistance()"
+      ></textarea>
+    </div>
+
+    <div class="example-context">
+      <div class="context-label">💡 Tip:</div>
+      Tap the message field to see AI writing assistance options. You can quickly improve, rephrase, or get help with your text.
+    </div>
+  </div>
+
+  <div class="keyboard-trigger" id="keyboardTrigger">
+    Tap message field to start typing
+  </div>
+
+  <div class="assistance-panel" id="assistancePanel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <div class="comet-icon"></div>
+        <span>Writing Assistant</span>
+      </div>
+      <button class="collapse-btn" onclick="hideAssistance()">↓</button>
+    </div>
+
+    <div class="quick-actions">
+      <button class="action-btn" onclick="handleAction('improve')">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="icon">✨</span>
+            <span>Improve writing</span>
+          </div>
+          <div class="description">Grammar & style</div>
+        </div>
+      </button>
+
+      <button class="action-btn" onclick="handleAction('rephrase')">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="icon">🔄</span>
+            <span>Rephrase</span>
+          </div>
+          <div class="description">Different words</div>
+        </div>
+      </button>
+
+      <button class="action-btn" onclick="handleAction('professional')">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="icon">💼</span>
+            <span>Make professional</span>
+          </div>
+          <div class="description">Formal tone</div>
+        </div>
+      </button>
+
+      <button class="action-btn" onclick="handleAction('shorter')">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="icon">✂️</span>
+            <span>Make shorter</span>
+          </div>
+          <div class="description">More concise</div>
+        </div>
+      </button>
+
+      <button class="action-btn" onclick="handleAction('expand')">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="icon">📝</span>
+            <span>Expand</span>
+          </div>
+          <div class="description">Add details</div>
+        </div>
+      </button>
+
+      <button class="action-btn" onclick="handleAction('continue')">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="icon">➡️</span>
+            <span>Continue writing</span>
+          </div>
+          <div class="description">Finish thought</div>
+        </div>
+      </button>
+    </div>
+
+    <div class="custom-prompt">
+      <input
+        type="text"
+        class="prompt-input"
+        id="customPrompt"
+        placeholder="Or describe what you want..."
+        onkeypress="handleCustomPrompt(event)"
+        oninput="updateSendButton()"
+      />
+      <button class="send-btn" id="sendBtn" onclick="sendCustomPrompt()" disabled>→</button>
+    </div>
+  </div>
+
+  <script>
+    let assistanceVisible = false;
+
+    function showAssistance() {
+      if (!assistanceVisible) {
+        document.getElementById('assistancePanel').classList.add('visible');
+        document.getElementById('keyboardTrigger').classList.add('hidden');
+        assistanceVisible = true;
+      }
+    }
+
+    function hideAssistance() {
+      document.getElementById('assistancePanel').classList.remove('visible');
+      document.getElementById('keyboardTrigger').classList.remove('hidden');
+      assistanceVisible = false;
+      document.getElementById('mainInput').blur();
+    }
+
+    function handleAction(action) {
+      const inputText = document.getElementById('mainInput').value;
+      console.log('Action:', action, 'on text:', inputText);
+
+      if (!inputText.trim()) {
+        alert('Please type some text first!');
+        return;
+      }
+
+      alert(`Action: ${action}\n\nIn real app, this would:\n1. Send your text + action to backend\n2. Get AI-improved version\n3. Show result in sidecar or inline\n4. Allow you to insert it back`);
+    }
+
+    function handleCustomPrompt(event) {
+      if (event.key === 'Enter') {
+        sendCustomPrompt();
+      }
+    }
+
+    function updateSendButton() {
+      const input = document.getElementById('customPrompt');
+      const btn = document.getElementById('sendBtn');
+      btn.disabled = !input.value.trim();
+    }
+
+    function sendCustomPrompt() {
+      const prompt = document.getElementById('customPrompt').value;
+      const inputText = document.getElementById('mainInput').value;
+
+      if (!prompt.trim()) return;
+
+      console.log('Custom prompt:', prompt, 'on text:', inputText);
+      alert(`Custom prompt: "${prompt}"\n\nIn real app, this would:\n1. Send your text + prompt to backend\n2. Get AI response\n3. Show result in sidecar\n4. Allow you to insert it back`);
+
+      document.getElementById('customPrompt').value = '';
+      updateSendButton();
+    }
+
+    // Simulate keyboard appearing/disappearing
+    document.getElementById('mainInput').addEventListener('blur', function() {
+      // In real mobile app, keyboard hide would be detected
+      // and assistance panel could stay visible or hide
+    });
+  </script>
+</body>
+</html>
