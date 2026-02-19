@@ -13,18 +13,26 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: #f5f5f5;
-      padding: 16px;
+      background: #e0e0e0;
+      padding: 0;
       line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .phone-frame {
+      max-width: 390px;
+      width: 100%;
+      background: #f5f5f5;
+      min-height: 100vh;
+      position: relative;
+      box-shadow: 0 0 40px rgba(0,0,0,0.2);
     }
 
     .article {
-      max-width: 600px;
-      margin: 0 auto;
       background: white;
-      padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px 16px;
     }
 
     .article h1 {
@@ -216,22 +224,11 @@
       pointer-events: auto;
     }
 
-    .selected-text-preview {
-      background: #f8f8f8;
-      padding: 10px 12px;
-      border-radius: 10px;
-      margin-bottom: 12px;
-      font-size: 13px;
-      color: #555;
-      max-height: 80px;
-      overflow-y: auto;
-      line-height: 1.5;
-      border-left: 3px solid #667eea;
-    }
   </style>
 </head>
 <body>
-  <div class="article">
+  <div class="phone-frame">
+    <div class="article">
     <h1>The Future of AI Assistants</h1>
     <div class="meta">Published on Feb 19, 2026 • 5 min read</div>
 
@@ -244,9 +241,9 @@
     <p data-id="p4">Mobile implementations present unique challenges. Text selection is more difficult on touch screens, and screen real estate is limited. Designers must balance functionality with usability, creating interfaces that feel natural on smaller devices.</p>
 
     <p data-id="p5">The key to success lies in understanding user behavior. On mobile, quick actions and contextual suggestions work better than complex interfaces. Users want instant results without interrupting their reading flow.</p>
-  </div>
+    </div>
 
-  <div class="overlay" id="overlay"></div>
+    <div class="overlay" id="overlay"></div>
 
   <div class="assistant-popup" id="popup">
     <div class="drag-handle"></div>
@@ -258,8 +255,6 @@
         </div>
         <button class="close-btn" onclick="hidePopup()">×</button>
       </div>
-
-      <div class="selected-text-preview" id="selectedText"></div>
 
       <div class="quick-actions">
         <button class="action-btn" onclick="handleAction('fact-check')">
@@ -298,9 +293,11 @@
       </div>
     </div>
   </div>
+  </div>
 
   <script>
     let selectedParagraph = null;
+    let selectedText = '';
 
     document.querySelectorAll('.article p').forEach(p => {
       p.addEventListener('click', function() {
@@ -313,9 +310,8 @@
         this.classList.add('selected');
         selectedParagraph = this;
 
-        // Show popup with selected text
-        const text = this.textContent;
-        document.getElementById('selectedText').textContent = text;
+        // Store selected text
+        selectedText = this.textContent;
         showPopup();
       });
     });
@@ -340,8 +336,7 @@
     document.getElementById('overlay').addEventListener('click', hidePopup);
 
     function handleAction(action) {
-      const text = document.getElementById('selectedText').textContent;
-      console.log('Action:', action, 'on text:', text.substring(0, 50) + '...');
+      console.log('Action:', action, 'on text:', selectedText.substring(0, 50) + '...');
       alert(`Action: ${action}\n\nIn real app, this would:\n1. Send text to backend\n2. Open sidecar with result\n3. Hide this popup`);
       hidePopup();
     }
@@ -349,8 +344,7 @@
     function handleCustomInput(event) {
       if (event.key === 'Enter') {
         const query = event.target.value;
-        const text = document.getElementById('selectedText').textContent;
-        console.log('Custom query:', query, 'on text:', text.substring(0, 50) + '...');
+        console.log('Custom query:', query, 'on text:', selectedText.substring(0, 50) + '...');
         alert(`Custom query: "${query}"\n\nIn real app, this would:\n1. Send query + selected text to backend\n2. Open sidecar with result\n3. Hide this popup`);
         hidePopup();
       }
